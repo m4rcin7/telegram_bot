@@ -1,21 +1,18 @@
+require("dotenv").config();
 const express = require("express");
-const PORT = process.env.PORT || 4040;
-const { handler } = require("./controller");
+const { handle } = require("./Telegram");
 
+const PORT = process.env.PORT || 4040;
 const app = express();
+
 app.use(express.json());
 
-app.post("*", async (req, res) => {
+app.post("/", async (req, res) => {
   console.log(req.body);
-
-  res.send(await handler(req));
+  await handle(req, res);
+  res.sendStatus(200);
 });
 
-app.get("*", async (req, res) => {
-  res.send(await handler(req));
-});
-
-app.listen(PORT, function (err) {
-  if (err) console.log(err);
-  console.log(`Server listening on PORT`, PORT);
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });
